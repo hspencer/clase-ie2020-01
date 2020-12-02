@@ -13,7 +13,7 @@ function preload() {
 }
 
 function setup() {
-  createCanvas(displayWidth, 500);
+  createCanvas(windowWidth, 500);
   w = width;
   h = height;
   textFont("monospace", 24);

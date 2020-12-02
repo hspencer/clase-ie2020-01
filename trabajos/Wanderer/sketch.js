@@ -2,7 +2,7 @@ let w = [];
 let num = 200;
 
 function setup() {
-  createCanvas(displayWidth, displayHeight);
+  createCanvas(windowWidth, windowHeight);
   for (let i = 0; i < num; i++) {
     w.push(new Wanderer());
   }

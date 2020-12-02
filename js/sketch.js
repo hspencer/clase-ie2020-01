@@ -39,7 +39,7 @@ function regen() {
 
   print("sw = "+sw+"\tsh = "+sh)
   
-  if(displayWidth < displayHeight){
+  if(windowWidth < windowHeight){
     let nm1 = new NoiseMachine(0, -20, sw/2, sh+40, 200, HALF_PI, color(245, 251, 20, 43));
     nm.push(nm1);
   

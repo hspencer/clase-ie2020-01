@@ -3,7 +3,7 @@ let blockSlider;
 let s;
 
 function setup() {
-  createCanvas(displayWidth, displayHeight);
+  createCanvas(windowWidth, windowHeight);
   blockSlider = document.getElementById('slider');
   reset();
   print("width = "+width);

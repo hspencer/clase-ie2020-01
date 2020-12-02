@@ -1,54 +1,106 @@
-/*
 
-un lindo timbre para estmpar <3
-
-*/
+let sketch;
+let nm;
 
 function setup() {
-  createCanvas(displayWidth, displayHeight);
-  background(0);
+  nm = [];
+  regen();
 }
 
-function draw() {}
 
-function stamp(x, y) {
-  blendMode(SCREEN);
-  noStroke();
-  fill(randomColor(), 150);
-  let t, r;
-  let n = round(random(3, 12)) * 2;
-  let s = TWO_PI / n; // incremento angular
-  let r1 = random(5, 20);
-  let r2 = random(20);
-  push();
-  translate(x, y);
-  rotate(random(TWO_PI));
-  beginShape();
-  for (let i = 0; i < n; i++) {
-    t = i * s;
-    if (i % 2 == 0) {
-      r = r1;
-    } else {
-      r = r2;
-    }
-    x = cos(t) * r;
-    y = sin(t) * r;
-    vertex(x, y);
+function draw() {
+  clear();
+  for(let i = 0; i < 200; i++){
+  // define color aleatorio 
+  stroke(random(255), random(255), random(255));
+  // defino un grosor aleatorio
+  strokeWeight(random(2, 20));
+  // dubujo un punto aleatorio
+  point(random(10, width-10), random(10, height - 10));
   }
-  endShape(CLOSE);
-  pop();
 }
 
-function mousePressed() {
-  stamp(mouseX, mouseY);
+function draw() {
+  blendMode(BLEND);
+  background(255);
+  blendMode(MULTIPLY);
+  for (let i = 0; i < nm.length; i++) {
+    nm[i].go();
+  }
 }
 
-function randomColor() {
-  let r = random(255);
-  let g = random(255);
-  let b = random(255);
-  let c = color(r, g, b);
-  return c;
+function regen() {
+  let p5holder = document.getElementById("p5");
+  let body = document.getElementById("container");
+  let sw = p5holder.offsetWidth;
+  let sh = body.offsetHeight;
+  sketch = createCanvas(sw, sh);
+  sketch.parent("p5");
 
+  print("sw = "+sw+"\tsh = "+sh)
+  
+  if(windowWidth < windowHeight){
+    let nm1 = new NoiseMachine(0, -20, sw/2, sh+40, 200, HALF_PI, color(245, 251, 20, 43));
+    nm.push(nm1);
+  
+    let nm2 = new NoiseMachine(sw, -20, sw/2, sh+40, 800, HALF_PI, color(202, 43, 80, 20));
+    nm.push(nm2);;
+  }else{
+    let nm1 = new NoiseMachine(-20, 0, sh/2, sw+40, 500, 0, color(245, 251, 20, 43));
+    nm.push(nm1);
+  
+    let nm2 = new NoiseMachine(-20, sh, sh/2, sw+40, 1000, 0, color(202, 43, 80, 20));
+    nm.push(nm2);;
+  }
 
+}
+
+function windowResized(){
+  nm = [];
+  regen();
+}
+
+class NoiseMachine {
+  constructor(x, y, w, l, speed, a, col) {
+    this.x = x;
+    this.y = y;
+    this.amp = w;
+    this.l = l;
+    this.speed = speed;
+    this.a = a; // angle
+    this.ns = random(999999999); // noise seed
+    this.col = col;
+  }
+
+  go() {
+    noStroke();
+    fill(this.col, 100);
+    rect(this.x, this.y - this.w / 2, this.l, this.amp);
+
+    noiseSeed(this.ns);
+    push();
+    translate(this.x, this.y);
+    rotate(this.a);
+
+    let step = 4;
+    let n;
+
+    beginShape();
+    
+    vertex(0, 0);
+    
+    for (let i = 0; i < this.l; i += step) {
+      n = noise(i / this.speed + millis() / 10000);
+      curveVertex(i, -n * this.amp);
+    }
+    
+    vertex(this.l, 0);
+    
+    for (let i = this.l - 1; i >= 0; i -= step) {
+      n = noise(i / this.speed + millis() / 30000);
+      curveVertex(i, n * this.amp);
+    }
+    endShape();
+    pop();
+  }
 }

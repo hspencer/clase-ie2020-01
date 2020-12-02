@@ -5,7 +5,7 @@ let nm;
 let num = 9;
 
 function setup() {
-  createCanvas(displayWidth, displayHeight);
+  createCanvas(windowWidth, windowHeight);
   regen();
 }
 
